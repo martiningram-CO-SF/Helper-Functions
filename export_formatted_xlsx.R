@@ -19,6 +19,18 @@ export_formatted_xlsx <- function(df_list, tab_names, filepath) {
     # Loop through dataframes and apply standard formatting
     for (i in seq_along(df_list)) {
         df <- df_list[[i]]
+        
+        # Standardise column names on the way out
+        # any_of() ensures this won't break if a dataframe doesn't contain these specific columns
+        df <- df |> 
+            dplyr::rename(dplyr::any_of(c(
+                "financial_year" = "fy",
+                "financial_year" = "fy_end",
+                "bu_name" = "business_unit",
+                "bu_name" = "operating unit",
+                "bu_name" = "operating_unit"
+            )))
+        
         sheet_name <- tab_names[i]
         
         wb <- wb %>%
